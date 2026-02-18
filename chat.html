@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat IA</title>
+  <link rel="stylesheet" href="./style.css">
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-blue-50 min-h-screen px-2">
+
+  <!-- MODAL -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
+    <div class="bg-gray-100 rounded-3xl p-8 w-96 flex flex-col gap-4 shadow-xl">
+      <h1 class="text-center text-2xl font-bold">¡Bienvenido!</h1>
+      <p class="text-center text-gray-500 text-sm">¿Cómo te llamas? La IA te responderá por tu nombre.</p>
+      <input
+        id="nameInput"
+        type="text"
+        placeholder="Tu nombre..."
+        class="p-4 border border-gray-300 rounded-2xl outline-none focus:ring-1 focus:ring-blue-400 transition"
+      />
+      <button
+        onclick="startChat()"
+        class="bg-blue-600 hover:bg-blue-500 text-white p-4 rounded-2xl transition font-semibold"
+      >
+        Entrar al chat →
+      </button>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="relative w-full max-w-3xl h-screen mx-auto flex flex-col overflow-hidden">
+
+    <!-- Nombre activo -->
+    <div class="pt-5 text-center text-base font-medium italic text-gray-500">
+      Chateando como: <span id="activeName" class="font-bold text-gray-800">...</span>
+    </div>
+
+    <!-- Mensajes -->
+    <div id="messages" class="flex flex-col gap-3 p-4 flex-1 overflow-y-auto" style="padding-bottom: 200px;">
+      <div class="self-start max-w-xl">
+        <h1 style="font-size: 3rem; font-weight: 700; line-height: 1.1;">
+          Hola<br>
+          <span>¿En qué puedo ayudarte?</span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- Sugerencias -->
+    <div id="suggestions" class="fixed bottom-28 flex flex-wrap justify-center gap-2 px-4 py-4" style="max-width: 800px;">
+      <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full transition text-sm">🧠 ¿Cuánto es 5 + 5?</button>
+      <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full transition text-sm">🌍 ¿Cuál es el país más grande?</button>
+      <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full transition text-sm">🚀 ¿Qué es la IA?</button>
+      <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full transition text-sm">⭐ Cuéntame una curiosidad</button>
+    </div>
+
+    <!-- Input -->
+    <div class="fixed bottom-2 flex flex-col gap-2" style="width: 800px;">
+      <div class="relative">
+        <input
+          id="questionInput"
+          type="text"
+          placeholder="Pregúntame algo..."
+          class="p-5 w-full rounded-full border border-gray-200 shadow-xl outline-none focus:ring-1 focus:ring-blue-400"
+          style="padding-right: 70px;"
+        />
+        <button
+          id="sendBtn"
+          onclick="sendMessage()"
+          class="absolute right-2 top-2 bg-gray-800 hover:bg-gray-600 transition disabled:bg-gray-200 flex justify-center items-center rounded-full"
+          style="width: 55px; height: 55px;"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/>
+            <path d="M6 12h16"/>
+          </svg>
+        </button>
+      </div>
+      <p class="text-center text-gray-400 text-xs">Desarrollado por: Sebastian Vasquez Echavarria</p>
+    </div>
+
+  </div>
+
+  <script>
+    const API_URL = "http://127.0.0.1:8000/ask";
+    let userName = "";
+    let firstMessage = true;
+
+    document.getElementById("nameInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") startChat();
+    });
+
+    document.getElementById("questionInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    function startChat() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) { alert("Escribe tu nombre para continuar"); return; }
+      userName = name;
+      document.getElementById("activeName").textContent = name;
+      document.getElementById("modal").style.display = "none";
+      document.getElementById("questionInput").focus();
+    }
+
+    function useSuggestion(btn) {
+      document.getElementById("questionInput").value = btn.textContent.slice(2).trim();
+      sendMessage();
+    }
+
+    function hideSuggestions() {
+      if (firstMessage) {
+        document.getElementById("suggestions").style.display = "none";
+        firstMessage = false;
+      }
+    }
+
+    function addMessage(text, type) {
+      const messages = document.getElementById("messages");
+      const div = document.createElement("div");
+
+      if (type === "user") {
+        div.style.cssText = "align-self:flex-end; background:#1f2937; color:white; padding:14px 18px; border-radius:30px 0px 30px 30px; max-width:320px; font-size:15px;";
+        div.textContent = text;
+
+      } else if (type === "bot") {
+        div.style.cssText = "align-self:flex-start; display:flex; align-items:flex-start; gap:10px; max-width:600px;";
+
+        const dot = document.createElement("span");
+        dot.style.cssText = "min-width:10px; height:10px; background:#22c55e; border-radius:50%; margin-top:6px; display:inline-block; flex-shrink:0;";
+
+        const textSpan = document.createElement("span");
+        textSpan.textContent = text;
+        textSpan.style.cssText = "font-size:15px; color:#1f2937; line-height:1.7;";
+
+        div.appendChild(dot);
+        div.appendChild(textSpan);
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return div;
+
+      } else {
+        div.style.cssText = "align-self:flex-start; display:flex; align-items:flex-start; gap:10px; max-width:600px;";
+
+        const dot = document.createElement("span");
+        dot.style.cssText = "min-width:10px; height:10px; background:#d1d5db; border-radius:50%; margin-top:6px; display:inline-block;";
+
+        const textSpan = document.createElement("span");
+        textSpan.textContent = text;
+        textSpan.style.cssText = "font-size:14px; color:#9ca3af; font-style:italic;";
+
+        div.appendChild(dot);
+        div.appendChild(textSpan);
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return div;
+      }
+
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+      return div;
+    }
+
+    async function sendMessage() {
+      const question = document.getElementById("questionInput").value.trim();
+      const btn = document.getElementById("sendBtn");
+      if (!question) return;
+
+      hideSuggestions();
+      addMessage(question, "user");
+      document.getElementById("questionInput").value = "";
+      btn.disabled = true;
+
+      const loading = addMessage("Pensando...", "loading");
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: userName, question })
+        });
+        const data = await res.json();
+        loading.remove();
+        addMessage(data.answer, "bot");
+      } catch (err) {
+        loading.remove();
+        addMessage("Error al conectar con la API ❌", "bot");
+      }
+
+      btn.disabled = false;
+    }
+  </script>
+
+</body>
+</html>
