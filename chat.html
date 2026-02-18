@@ -3,9 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>Chat IA</title>
-  <link rel="stylesheet" href="./style.css">
   <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+<style>
+    
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+
+
+*{
+     font-family: "Google Sans", sans-serif;
+     color: #333;
+     }
+     
+
+input{
+    font-weight: 300;
+}
+</style>
 <body class="bg-blue-50 min-h-screen px-2">
 
   <!-- MODAL -->
@@ -32,8 +46,11 @@
   <div class="relative w-full max-w-3xl h-screen mx-auto flex flex-col overflow-hidden">
 
     <!-- Nombre activo -->
-    <div class="pt-5 text-center text-base font-medium italic text-gray-500">
-      Chateando como: <span id="activeName" class="font-bold text-gray-800">...</span>
+    <div class="pt-5 flex justify-center">
+      <button class="bg-violet-200 p-[18px_22px_18px_22px] rounded-full text-white flex items-center gap-[10px]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-marked-icon lucide-book-marked"><path d="M10 2v8l3-3 3 3V2"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg>
+        Ver documentacion
+      </button>
     </div>
 
     <!-- Mensajes -->
@@ -82,7 +99,7 @@
   </div>
 
   <script>
-    const API_URL = "http://127.0.0.1:8000/ask";
+    const API_URL = "https://python-api-render-ubr9.onrender.com/ask";
     let userName = "";
     let firstMessage = true;
 
