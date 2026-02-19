@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+
+* {
+  font-family: "Google Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #333;
+}
+
+h1 {
+  white-space: nowrap;
+}
+
+a, p, input {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+/* BODY */
+.body-padding {
+  padding: 0 10px;
+}
+
+/* MODAL BIENVENIDA */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.119);
+  backdrop-filter: blur(8px);
+}
+
+.modal-welcome {
+  width: 420px;
+}
+
+/* INPUT NOMBRE */
+.name-input {
+  transition: box-shadow 0.2s;
+}
+
+.name-input:focus {
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+/* CHAT */
+.chat-wrapper {
+  max-width: 800px;
+}
+
+/* MENSAJES */
+.messages {
+  padding-bottom: 200px;
+}
+
+/* SUGERENCIAS */
+#suggestions {
+  bottom: 110px;
+  max-width: 800px;
+}
+
+/* TITULO BIENVENIDA */
+.welcome-title {
+  font-size: 2.5rem;
+  font-weight: 200;
+  line-height: 1.1;
+  color: #1f2937;
+  padding-bottom: 40px;
+}
+
+/* SVG SUBRAYADO */
+.underline-svg {
+  height: 50px;
+  left: 45%;
+  bottom: 20px;
+}
+
+/* INPUT BAR */
+.input-bar {
+  bottom: 10px;
+  width: 800px;
+}
+
+/* INPUT PREGUNTA */
+.question-input {
+  padding: 20px 70px 20px 20px;
+}
+
+.question-input:focus {
+  /* box-shadow: 0 0 0 1px #b439fb33; */
+  box-shadow: 0 0 0 1px #b439fbe8;
+}
+
+/* BOTON ENVIAR */
+#sendBtn, .sendBtn {
+  width: 55px;
+  height: 55px;
+}
+
+#sendBtn:disabled,
+.sendBtn:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* FOOTER */
+.footer-text {
+  font-size: 0.78rem;
+}
+
+/* MODAL INFO */
+.info-modal-overlay {
+  display: none;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.modal-info {
+  width: 460px;
+}

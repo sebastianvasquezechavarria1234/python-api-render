@@ -3,89 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <title>Chat IA</title>
-  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./tailwind.css">
+  <link rel="stylesheet" href="./style.css">
 </head>
-<style>
-    
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+<body class="bg-blue-50 min-h-screen body-padding">
 
-
-*{
-     font-family: "Google Sans", sans-serif;
-     color: #333;
-     }
-     
-
-input{
-    font-weight: 300;
-}
-</style>
-<body class="bg-blue-50 min-h-screen px-2">
-
-  <!-- MODAL -->
-  <div id="modal" class="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
-    <div class="bg-gray-100 rounded-3xl p-8 w-96 flex flex-col gap-4 shadow-xl">
-      <h1 class="text-center text-2xl font-bold">¡Bienvenido!</h1>
+  <!-- MODAL NOMBRE -->
+  <div id="modal" class="modal-overlay fixed inset-0 flex items-center justify-center z-50">
+    <div style="border-radius: 30px; width: 500px;" class="modal-welcome bg-white rounded-3xl p-12 flex flex-col gap-4 shadow-2xl">
+      <h1 class="welcome-title text-center italic">¡Bienvenido!</h1>
       <p class="text-center text-gray-500 text-sm">¿Cómo te llamas? La IA te responderá por tu nombre.</p>
-      <input
-        id="nameInput"
-        type="text"
-        placeholder="Tu nombre..."
-        class="p-4 border border-gray-300 rounded-2xl outline-none focus:ring-1 focus:ring-blue-400 transition"
-      />
-      <button
-        onclick="startChat()"
-        class="bg-blue-600 hover:bg-blue-500 text-white p-4 rounded-2xl transition font-semibold"
-      >
-        Entrar al chat →
+      <div class="relative" style="position: relative;">
+        <input
+          id="nameInput"
+          type="text"
+          placeholder="Tu nombre..."
+          class="question-input w-full rounded-full border border-gray-200  outline-none bg-white"
+        />
+        <button
+          onclick="startChat()"
+          class="sendBtn absolute right-1.5 top-1.5 bg-purple-600 hover:bg-purple-400 flex justify-center items-center rounded-full transition"
+        >
+        <svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+
+        
       </button>
+      </div>
     </div>
   </div>
 
   <!-- CHAT -->
-  <div class="relative w-full max-w-3xl h-screen mx-auto flex flex-col overflow-hidden">
+  <div class="chat-wrapper relative w-full h-screen mx-auto flex flex-col overflow-hidden">
 
-    <!-- Nombre activo -->
-    <div class="pt-5 flex justify-center">
-      <button class="bg-violet-200 p-[18px_22px_18px_22px] rounded-full text-white flex items-center gap-[10px]">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-marked-icon lucide-book-marked"><path d="M10 2v8l3-3 3 3V2"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg>
-        Ver documentacion
-      </button>
-    </div>
+    <!-- Header -->
+    <div class="py-3 px-4 flex items-center justify-between border-b border-gray-200">
+      <span class="text-base font-medium italic text-gray-500">
+        Chateando como: <strong id="activeName" class="text-gray-800">...</strong>
+      </span>
+      <div class="flex gap-2">
+        <button
+          onclick="document.getElementById('infoModal').style.display='flex'"
+          class="bg-purple-200 hover:bg-purple-100 italic text-purple-700 flex items-center gap-2 py-4 px-6 rounded-full transition border border-purple-300"
+        >
+        <span class="block w-2 h-2 bg-purple-500 rounded-full"></span>
+           Documentacion
+        </button>
+        <a style="color: white;" href="https://sebas-dev.vercel.app/" target="_blank"
+          class="bg-purple-600 hover:bg-purple-400 italic text-purple-700 flex items-center gap-2 py-4 px-6 rounded-full transition border border-purple-300"
+        >
+        <span class="block w-2 h-2 bg-white rounded-full"></span>
+           Portafolio web
+        </a>
 
-    <!-- Mensajes -->
-    <div id="messages" class="flex flex-col gap-3 p-4 flex-1 overflow-y-auto" style="padding-bottom: 200px;">
-      <div class="self-start max-w-xl">
-        <h1 style="font-size: 3rem; font-weight: 700; line-height: 1.1;">
-          Hola<br>
-          <span>¿En qué puedo ayudarte?</span>
-        </h1>
       </div>
     </div>
 
+    <!-- Mensajes -->
+    <div id="messages" class="messages flex flex-col gap-3 p-4">
+      <div class="self-start"></div>
+    </div>
+
     <!-- Sugerencias -->
-    <div id="suggestions" class="fixed bottom-28 flex flex-wrap justify-center gap-2 px-4 py-4" style="max-width: 800px;">
-      <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full transition text-sm">🧠 ¿Cuánto es 5 + 5?</button>
-      <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full transition text-sm">🌍 ¿Cuál es el país más grande?</button>
-      <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full transition text-sm">🚀 ¿Qué es la IA?</button>
-      <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full transition text-sm">⭐ Cuéntame una curiosidad</button>
+    <div id="suggestions" class="suggestions fixed px-4 py-4">
+      <h1 class="welcome-title relative text-center block">
+        Hola<br>
+        ¿En qué puedo ayudarte?
+        <span class=" w-full absolute flex justify-center block">
+         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="311" height="16" viewBox="0 0 311 16" fill="none">
+<mask id="mask0_1552_2763" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="311" height="16">
+<path d="M0 0H311V16H0V0Z" fill="url(#pattern0)"/>
+</mask>
+<g mask="url(#mask0_1552_2763)">
+<path d="M0 0H311V16H0V0Z" fill="#9A4292"/>
+</g>
+<defs>
+<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_1552_2763" transform="scale(0.00337 0.05556)"/>
+</pattern>
+<image id="image0_1552_2763" width="297" height="18" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASkAAAASCAYAAAAHUyhYAAAQxklEQVR4Ae3cBbBmxREFYGJAiBAIBEIqCQkJcVfiQtxDhLgrcXeFuLu7u7u7u7u7u1Wd1Pc4XfUvC+HxtorardxXNXXvnTvT09N9+kzP3H93u+1W/pKcMMnVkuyzUr3cLhZYLLCNWSDJMZQjUzvJbkmOl2TPJKdOcqEkF+310uUD18snuVKSSya5YpIbJLlZkqv33bWSHJjkeklul+RuLfdJct8kD0pyhyQ3TnLH3t8vyU2SXCfJNZNcv/2NcZxNdE+ye5KHJ/llkr8k+XOSHyV5dZLrJqHk3km236Tj8rBYYLHAFlkgyTFbjp1EOdZ6BQrkJKdPcqkGPdK4VRLBf48kj07ypCRPSPLuJB9L8uEkP07y0yTfTfKvxvxvkvwqyQ+T/KLvtfl1636e5PdJfpbkT0n+WJ74RxLl30n+ulL3tyR/SPL3JO71wSuuc//b9tFfG/JHFj33WrNFGffFOfSP0j9o+X4nQRAByn+SeKb8l5I8L8nDagiMiWkx8clbdmD49Rp9abdY4Oi2QJLjGhM5NJs4SZKTJjlDy5mSnLX3+zTb8N7CrpyAjBKMbERbcWBHIkOQKdy5JCJWnp/kmb2+oLGDSNy/MslLkjwrySuSvDnJm0owP0nyvSTiEkEgFLGICMSjpEIbZCLZQDrukY737vVBQNpNnbbqtf9dC7LQXlskNW3da2NM7YfY1Csz7rwnRxukpE5furunu/fukdcU7xV/iGpPzrlglTbJIShk9bUk3yhRfTnJZ5J8MskXS1DfbD9tGc6gij6YmmImaXBsqv6Dzc4eVcY39kWaQl4hyZmTnDLJfgUFp+/Uleb4Q3jrSWOPbrAv4x2+BZLs2BXfluLEPVLgS8U7gb53iUJmsEfv90hyxiRn6fbDduIaSa7cLYHthq3FbZPculuMmzbzv2HxdZsk6m6e5OAkD2128ZriGN4FPiwL5q+0Hsbdq7cYw/9XGxOwPvcCUNyIAcEmCxBgglEATnB+p+2GNLQfEhArZGiPDOiERGQsnt1ro1479UMy7r0jzzuFXPXuvSMDCekzdTOmd4hFmezJPcIxN3UjdwjI3IasxLt78o2rzRCTuiE0dWMT17kfG+GIISc7Offs6e8gJGX/qdEYiEERlCvDMMCHSlKI6gt13Kfr0G8l+Wjfu74nySdWyIzDOZXDyft6xzIeY5qcwoiMYqLau2dM7/7ZtgDFKOrcAxby+3yST5UEX1UwPjDJM5IgRPvhByS5e5Jbdv97mZLjxZNcoOV8DQwptHKabnORpb37ibp/X8sQN0qWK6swebJOq7VV2r1t9emSnErAtu2uSXbp+BPcG8pQqz9yML9zdTFwBnC51l22ZODZYuF6iWbIV+35A3Jgy0c26B+T5P5J7l3bvyiJIht4W5LXJXlD/ePZ1oO/+BkYZemIQED4G/APuGECFrSBI9iAT0QCT7Dw7W5nPJMLl7Dr6r32MOaKaBT32g85edZ+FueROxg2vvbaGMOY5NBNzHgPk9oo+tPBvbb6GUN7z4r25iOozY0u5CBHz9qTQZaY0VedZ3FgfDLIopMY02bii2yFbbVhg1XCYtvVot+MQw55xhCrYk9buk4f9zOG65CQ96tkxJf8yt+rBSkNMSEnxK6te38HIKmD+mDilDF5xjFxxhogfK7gAjJEZH/7riTvTfLOPn88yUdKUEgMWXmWtmlPFjnaKeQAq/rPtgz5Mbg6xMi5+pGjTkbnmSNnpVOnr3kgUu/pD3BAYozV+dHLikp/8wVEsumM9NxrQyYd3X+gOr89yVuTvDzJ+yuDHPVsot20MW9GH0ANMDmfbmQbw5h0Nr4689F3xnRvXvSyGLCftmxCB30F/7OrA7uZM+AAJZnIQn82M6b3xiUXiF9fGezEJvQGTP0BzBVY6c7O+k/gsZ/5qGNvMhVyLHLG08azubhnE33gwBXmyNafjhPcxmJf8+QHczUPcoYEtB/b8KusfXSkEzuaH7vABVLRh02cvRqbburNiR6C1T1dzeGl9Qu58Pm+JE+rDwaj5vGOtmdzZXA3JEFvxXh0cdXfXIw7/cxVUYcMvHfEwudksi8butomwh5dJ77MxdzhxFzMUZ3xppANI+rpIv7ZaOw/fYxBhvfm72quMyf4oSPMkOd+CGvqYEid93DlHmFNxqmdhEmdrNTf/kjKqo0xMZ+BxlljQI6nvKDjKMZ1fW6SJ/fKcJxtv20Prc0bu8d2bxW1zwZUBmRQDkd4r+2KO0FnBSYfQDkOENQJWiDVjsE4j0MYU6B5BuQBq7GMPaDU3716BbFyqvl5JtM8yRrgkO/d2GCCxzN5bMRJdNIPIABMH30BachW37Gt/trTVR8yRhYATL13dBl92APgyNdfsBpb/chAYGwG0GQO2bGP+U8/V3LpqZ35y3wQnT50AGCy31JfCX7B7h2AAra5CBq6mOv4kW0FP1nqEQT/6M/vfGMegynj0E/7IR7v9OErmIGtmT87ITf6wq3+dPL8uJ7nsAlsOjiW7fnKxD7Ilo3opz2sqjcfdtHPvSI26PXC6jqLBlvQi/28ZwNtjPfYYp/d4AGRuMK68ydnT3RnMz4gkz3MDenRU18xw29ja3rqR3fxyKZkiQ9ZrLMu/mBvPmUjcxn88CcCReDaKGRpB59s7H4IiAx92UFfdh7CZUO2YXf+Uk9PdQgKodkyDlEhJUWGpA5hISXFvXoH7/OMpMT7LmsHCSUbrDVAN7DBTEKgUIixgEodIFIeiEzMPSdxAqcx9mQSDGcLJusABIf0npGcLxG2FD5Lcpj+thcO4R/fcwRjcYwzCEDjvKckeWqLZ04CYMZ3BRLGpx+nmY8r/V3pMcHh2f0EmflxFLAaG7gY3/wdZLKHq+cn9sMBGUOkAlhfY7EJPRAAufow/AS6MQHAVXt6AssQmmfvgUUAzALAtsCmsL325uA92QKd3q5sdpcCnt50Mwd+AkY2E6iexz4jSxCag8Bjc4GJfBR2RyDG5FPz4lMYMl+LkAA6pPhiF/LJtmjJ+JCEjJRsQfay6g0/PknDhfkIVofOtpcwQg9t2caW9dxdINmDDvfqFtXW2VmWvsqF++WLTITsC5hP6z6dk0lnCy+bIVIBQ5fzJjlF5+LTujOwOd+6RbHN/+xMJp+zHXvDKV88vX0cPxj7TkmeU3vYOrMDIqADPX2Amr5iEUbEjXFgiW/pLK7ECr/CLX3ZGi6My0Zw5B35CGEyGdtsyckQhHEQiGdt3LMBcoKPiXP+nx2VuXpHP+PCFDIaQhtikh1ZpGFPPJkDnZGZ45z5c8/f+21yypnEWYzGGB/IRiH3BhcEBifYPWWsHopBAc9KgEw4xwQmuxJQ92xxbuG9rMuBJiD6AgJYjA2s7q02nH3tPjtfsi3lNL+xcMh+1wLOeRPACAbOQnDOmJy1+coC2FYgY/pE6wzK4at7AEaUZPi9h3GN5eyFrsDqXAugBKXD19tXpjHJ9/WGUc1XUD6k793TF+jMRTALeOAiC8H5ovOI2sZPQMydTQWwwBfsxvGJmSyZKjsJJDLNVyCYG8AKBPoKAouHufswYT7sQke+RXj8ZWx6+N2Lr1L0Mn9kakx25Fv4sEj44uUsDxn4zYu5Clp2ZCsH1WRoq15Q8TE/KnS5UcdzJuYsjD3NA1kITDYxP+1lFQjFvTM7PoIRB+N8gcRO1vEdjvPrOYoPsn15QyjO0JyrIQN+NW/jGNvnero6qzQPWEAk7AyrcIZAYcA54Tlre3LMhS0RB58hHXPma35BwrIdMSCOEAYMIGn2RwqzYCAp7SQE3iF08SdDEeDqxZ4FEYb4hY7sg5j4n3+RsXjzWyX+4Cd1/IxQEa4PVjv2A8Ve86m/Z57OXpXT9ozUuag2rs5MD81sVhjEh63K2r1np2uyV5r8z9t+GZ0xfGBZk7dZpyQ+vQosaRZjMATDMqpgwcQADsBIyNU7RrKKKsgLszIwB7hneEZnVO3JBHIAFJRWROMCt8DyDvil7LIwgAQmAPUlB6ABEPitXJwBiAALTEjnYknO38/ASAR4teE0AQn0nMWBD17pB8yCZb4gzUEx2fpyMnJ10M3pPi0jCyQFtIjUyj6k557ewE9PJK6f9oJMYAgQX6181nY1hvnRQVAJDs/IQaABD5B5pgv55mheCN+nb7bxVUzRFrjMF/GwDzCzHTsYQybhh7xsgdD9qO9szWod2huLXAf99BKcMl5f3wDToiGA6eA3dQjF/PjD+PSxiLCHOThi8Ps7hMO3+3fu/EEvwS0btpAcUNIV+MiL/chFcn78pw2iQQawBG/sKwuGOZmDjM+ckbgrbMMRvFl8EYFsQ1sYn+xVlukZWZEBx7ITWGcnmYWFW1FvfHogQIsMAlOHFPlK4W/2gyd4Yy/kjwTY5iq1k4UBJtYV8P0pkZ9RHH6Abxbx22hFGZQDMTiGt6pzNmJBQMjH1kMG4YvXGgs3PQViRhdoHDErP+DJUKwwwAc4Q1xIy9aLfKuBMaWAngFgtm/aIEX9tAMcoEFoVixgl4Latjh/oKsMBAm4CnQBqB1Z9vxAbvW16gtSANLOyin7AXzkYuUU5AJVYMnEBBly8GM5QY5UfRUTwOwgXUdwgkiQAh9CEKwCTYbDDgiJLIDWFzFYBdkXOQt+MpCzLYzgNL6s5+wdW6BpI4PyBVNQCyBzAnK62FILBiRqfD61CCAIJGvO5sJHfG7B4Df6Inw+9Y5NLCgyDfOzCMkK2JZvjctnfAJDApc/BT1/GXeycQufYJcByAQtfALcdk5b/uZH2wZZPiIhC9mxhWzRHNjLYqYfHZGPoh09kSkfsv+QKNuyh5+7IGdz9PMXhCyLkJ0hWttIfWFdVgbvOwnvzX4RvY3G/DapdsEnvZQ5IQr7R0AR3EgBkfhkeOCRTbC/bwICn885GQjms7tVWLAJoMkcgEhgCg4rPnJDMojAKmhlAkSpsdTaFgPI50wFgVntBAPS0gaxKQCOYBGtIAJs5CBlnixPIHg/WaFs0JwBnmzkKeCMJ7AQupVYe0Fm7FUiRUbmoI5OruQJVGm78QWbeWinP9Khn9UYKQk+80VC6kdXZKCQ6+DS+DJTq76MjW7IRhvbESk/e5CBIIyPWCwmbGhcBDTZLd30U0eG7Jr9z9MAR8qyHhmkLaKsUsZpgUJ8Mkd1sgZkbAFDGLZ8SBvZ8vuuR4Sj/sBy038e0cbFll9o+8W231f5PZ2yoZ9mHJEOS/1WaIHuD4FP6mslQ1KCGzkBKuJSfCoUCFY1gLUSWYV22AqntaZStyZ+UGiL4iDU74UAW6qNNAWOFdb2Q9otW5KJyLoQhqCToQhEWcuc/8i8BLvtFtJFstoLTNkM4pXFIGFyjTGrue0buyFzB722aLIrBK5Y5a3kftVMtnf+XRaby6Bsa53DeC/4ZX/zTy12PqwvGvh+5+X3Vuaun7E979wFhT7LP4E6rPGW563LAt3aDDkhJasv0lJkFE7qFdmHdFxb2zcrtRV8361rRlumTYlh7R9slgTs/yfYt1e3ZSMsvRcLLBY4yhbontyWwHbCNsiWxxVp2Q7aDjl7cEYk03KVbc0W0dZht6M88NJhscBigcUC67VAtwTOFXzFc/4he/J7C19DFBmUMwsHne6d/fhVskNVh7i+XCznBOs1+NJuscBigS23QD/7Ojieg1Xbv9WtoK2hg1hf1/ZdtkJbbvNFwmKBxQIbtEDPZRz4Otx1ALvu/w9ng0Mu3RYLLBb4P7LAfwEq2Td/jm805gAAAABJRU5ErkJggg=="/>
+</defs>
+</svg>
+        </span>
+      </h1>
+      <div class="flex flex-wrap justify-center gap-2">
+        <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full border border-gray-100 transition">🧠 ¿Cuánto es 5 + 5?</button>
+        <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full border border-gray-100 transition">🌍 ¿Cuál es el país más grande?</button>
+        <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full border border-gray-100 transition">🚀 ¿Qué es la IA?</button>
+        <button onclick="useSuggestion(this)" class="py-4 px-5 bg-white hover:bg-gray-200 rounded-full border border-gray-100 transition">⭐ Cuéntame una curiosidad</button>
+      </div>
     </div>
 
     <!-- Input -->
-    <div class="fixed bottom-2 flex flex-col gap-2" style="width: 800px;">
+    <div class="input-bar fixed flex flex-col gap-2">
       <div class="relative">
         <input
           id="questionInput"
           type="text"
           placeholder="Pregúntame algo..."
-          class="p-5 w-full rounded-full border border-gray-200 shadow-xl outline-none focus:ring-1 focus:ring-blue-400"
-          style="padding-right: 70px;"
+          class="question-input w-full rounded-full border border-gray-200 shadow-xl outline-none bg-white"
         />
         <button
           id="sendBtn"
           onclick="sendMessage()"
-          class="absolute right-2 top-2 bg-gray-800 hover:bg-gray-600 transition disabled:bg-gray-200 flex justify-center items-center rounded-full"
-          style="width: 55px; height: 55px;"
+          class="absolute right-1.5 top-1.5 bg-purple-600 hover:bg-purple-400 flex justify-center items-center rounded-full transition"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/>
@@ -93,120 +113,40 @@ input{
           </svg>
         </button>
       </div>
-      <p class="text-center text-gray-400 text-xs">Desarrollado por: Sebastian Vasquez Echavarria</p>
+      <a href="https://sebas-dev.vercel.app/" target="_blank" class="footer-text inline-flex justify-center hover:underline text-center text-gray-400">Desarrollado por: Sebastian Vasquez Echavarria</a>
     </div>
 
   </div>
 
-  <script>
-    const API_URL = "https://python-api-render-ubr9.onrender.com/ask";
-    let userName = "";
-    let firstMessage = true;
+  <!-- MODAL INFO -->
+  <div id="infoModal" class="info-modal-overlay fixed inset-0 items-center justify-center z-50">
+    <div class="modal-info bg-white rounded-3xl p-8 flex flex-col gap-4 shadow-2xl">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-800">🛠️ ¿Cómo funciona?</h2>
+        <button onclick="document.getElementById('infoModal').style.display='none'" class="text-gray-400 hover:text-gray-600 text-2xl font-bold bg-transparent border-none cursor-pointer">✕</button>
+      </div>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        Este chatbot es una <strong>API intermediaria</strong> construida en Python que conecta al usuario con un modelo de IA.
+      </p>
+      <div class="bg-blue-50 rounded-2xl p-4 text-sm text-gray-700 leading-loose">
+        <p>👤 <strong>Usuario</strong> escribe una pregunta</p>
+        <p>⬇️</p>
+        <p>⚙️ <strong>FastAPI</strong> recibe y procesa</p>
+        <p>⬇️</p>
+        <p>🤖 <strong>Groq (LLaMA)</strong> genera la respuesta</p>
+        <p>⬇️</p>
+        <p>💬 Respuesta personalizada con tu nombre</p>
+      </div>
+      <div class="text-sm text-gray-600 flex flex-col gap-1">
+        <p>🐍 <strong>Backend:</strong> Python + FastAPI</p>
+        <p>🤖 <strong>IA:</strong> Groq — llama-3.3-70b-versatile</p>
+        <p>🎨 <strong>Frontend:</strong> HTML + Tailwind CSS</p>
+        <p>☁️ <strong>Deploy:</strong> Render (API) + Vercel (frontend)</p>
+        <p>👨‍💻 <strong>Autor:</strong> Sebastian Vasquez Echavarria</p>
+      </div>
+    </div>
+  </div>
 
-    document.getElementById("nameInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") startChat();
-    });
-
-    document.getElementById("questionInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") sendMessage();
-    });
-
-    function startChat() {
-      const name = document.getElementById("nameInput").value.trim();
-      if (!name) { alert("Escribe tu nombre para continuar"); return; }
-      userName = name;
-      document.getElementById("activeName").textContent = name;
-      document.getElementById("modal").style.display = "none";
-      document.getElementById("questionInput").focus();
-    }
-
-    function useSuggestion(btn) {
-      document.getElementById("questionInput").value = btn.textContent.slice(2).trim();
-      sendMessage();
-    }
-
-    function hideSuggestions() {
-      if (firstMessage) {
-        document.getElementById("suggestions").style.display = "none";
-        firstMessage = false;
-      }
-    }
-
-    function addMessage(text, type) {
-      const messages = document.getElementById("messages");
-      const div = document.createElement("div");
-
-      if (type === "user") {
-        div.style.cssText = "align-self:flex-end; background:#1f2937; color:white; padding:14px 18px; border-radius:30px 0px 30px 30px; max-width:320px; font-size:15px;";
-        div.textContent = text;
-
-      } else if (type === "bot") {
-        div.style.cssText = "align-self:flex-start; display:flex; align-items:flex-start; gap:10px; max-width:600px;";
-
-        const dot = document.createElement("span");
-        dot.style.cssText = "min-width:10px; height:10px; background:#22c55e; border-radius:50%; margin-top:6px; display:inline-block; flex-shrink:0;";
-
-        const textSpan = document.createElement("span");
-        textSpan.textContent = text;
-        textSpan.style.cssText = "font-size:15px; color:#1f2937; line-height:1.7;";
-
-        div.appendChild(dot);
-        div.appendChild(textSpan);
-        messages.appendChild(div);
-        messages.scrollTop = messages.scrollHeight;
-        return div;
-
-      } else {
-        div.style.cssText = "align-self:flex-start; display:flex; align-items:flex-start; gap:10px; max-width:600px;";
-
-        const dot = document.createElement("span");
-        dot.style.cssText = "min-width:10px; height:10px; background:#d1d5db; border-radius:50%; margin-top:6px; display:inline-block;";
-
-        const textSpan = document.createElement("span");
-        textSpan.textContent = text;
-        textSpan.style.cssText = "font-size:14px; color:#9ca3af; font-style:italic;";
-
-        div.appendChild(dot);
-        div.appendChild(textSpan);
-        messages.appendChild(div);
-        messages.scrollTop = messages.scrollHeight;
-        return div;
-      }
-
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-      return div;
-    }
-
-    async function sendMessage() {
-      const question = document.getElementById("questionInput").value.trim();
-      const btn = document.getElementById("sendBtn");
-      if (!question) return;
-
-      hideSuggestions();
-      addMessage(question, "user");
-      document.getElementById("questionInput").value = "";
-      btn.disabled = true;
-
-      const loading = addMessage("Pensando...", "loading");
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: userName, question })
-        });
-        const data = await res.json();
-        loading.remove();
-        addMessage(data.answer, "bot");
-      } catch (err) {
-        loading.remove();
-        addMessage("Error al conectar con la API ❌", "bot");
-      }
-
-      btn.disabled = false;
-    }
-  </script>
-
+  <script src="./script.js"></script>
 </body>
 </html>
