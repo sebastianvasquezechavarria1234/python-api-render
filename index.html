@@ -9,53 +9,65 @@
 </head>
 <body class="bg-blue-50 min-h-screen body-padding">
 
+  <!-- SIDEBAR -->
+  <div id="sidebar" class="sidebar">
+    <button style="color: white;" onclick="newChat()" class="bg-purple-600 hover:bg-purple-400 italic flex items-center gap-2 py-4 px-6 rounded-full transition border border-purple-300">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+       Nuevo chat
+      </button>
+    <span class="history-title mt-2">Historial</span>
+    <div id="historyList"></div>
+  </div>
+
   <!-- MODAL NOMBRE -->
   <div id="modal" class="modal-overlay fixed inset-0 flex items-center justify-center z-50">
-    <div style="border-radius: 30px; width: 500px;" class="modal-welcome bg-white rounded-3xl p-12 flex flex-col gap-4 shadow-2xl">
+    <div style="border-radius: 30px;" class="modal-welcome bg-white rounded-3xl p-12 flex flex-col gap-4 shadow-2xl">
       <h1 class="welcome-title text-center italic">¡Bienvenido!</h1>
-      <p class="text-center text-gray-500 text-sm">¿Cómo te llamas? La IA te responderá por tu nombre.</p>
-      <div class="relative" style="position: relative;">
+      <p class="text-center text-gray-500 text-sm">   La API de este chat está desplegada en Render,
+  el servidor entra en reposo automáticamente — la primera consulta lo reactiva, 
+  lo que puede tomar entre 30 y 60 segundos. Las siguientes respuestas serán inmediatas.</p>
+      <div class="relative">
         <input
           id="nameInput"
           type="text"
           placeholder="Tu nombre..."
-          class="question-input w-full rounded-full border border-gray-200  outline-none bg-white"
+          class="question-input w-full rounded-full border border-gray-200 outline-none bg-white"
         />
         <button
           onclick="startChat()"
           class="sendBtn absolute right-1.5 top-1.5 bg-purple-600 hover:bg-purple-400 flex justify-center items-center rounded-full transition"
         >
-        <svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-
-        
-      </button>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
       </div>
     </div>
   </div>
 
   <!-- CHAT -->
-  <div class="chat-wrapper relative w-full h-screen mx-auto flex flex-col overflow-hidden">
+  <div class="chat-wrapper relative w-full mx-auto">
 
     <!-- Header -->
     <div class="py-3 px-4 flex items-center justify-between border-b border-gray-200">
       <span class="text-base font-medium italic text-gray-500">
         Chateando como: <strong id="activeName" class="text-gray-800">...</strong>
       </span>
-      <div class="flex gap-2">
+      <div class="flex gap-2 items-center">
+
+       
+
         <button
           onclick="document.getElementById('infoModal').style.display='flex'"
           class="bg-purple-200 hover:bg-purple-100 italic text-purple-700 flex items-center gap-2 py-4 px-6 rounded-full transition border border-purple-300"
         >
-        <span class="block w-2 h-2 bg-purple-500 rounded-full"></span>
-           Documentacion
+          <span class="block w-2 h-2 bg-purple-500 rounded-full"></span>
+          Documentacion
         </button>
         <a style="color: white;" href="https://sebas-dev.vercel.app/" target="_blank"
-          class="bg-purple-600 hover:bg-purple-400 italic text-purple-700 flex items-center gap-2 py-4 px-6 rounded-full transition border border-purple-300"
+          class="bg-purple-600 hover:bg-purple-400 italic flex items-center gap-2 py-4 px-6 rounded-full transition border border-purple-300"
         >
-        <span class="block w-2 h-2 bg-white rounded-full"></span>
-           Portafolio web
+          <span class="block w-2 h-2 bg-white rounded-full"></span>
+          Portafolio web
         </a>
-
       </div>
     </div>
 
@@ -67,23 +79,22 @@
     <!-- Sugerencias -->
     <div id="suggestions" class="suggestions fixed px-4 py-4">
       <h1 class="welcome-title relative text-center block">
-        Hola<br>
-        ¿En qué puedo ayudarte?
-        <span class=" w-full absolute flex justify-center block">
-         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="311" height="16" viewBox="0 0 311 16" fill="none">
-<mask id="mask0_1552_2763" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="311" height="16">
-<path d="M0 0H311V16H0V0Z" fill="url(#pattern0)"/>
-</mask>
-<g mask="url(#mask0_1552_2763)">
-<path d="M0 0H311V16H0V0Z" fill="#9A4292"/>
-</g>
-<defs>
-<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image0_1552_2763" transform="scale(0.00337 0.05556)"/>
-</pattern>
-<image id="image0_1552_2763" width="297" height="18" xlink:href="data:image/png;base64,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"/>
-</defs>
-</svg>
+        Hola<br>¿En qué puedo ayudarte?
+        <span class="w-full absolute flex justify-center block">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="311" height="16" viewBox="0 0 311 16" fill="none">
+            <mask id="mask0_1552_2763" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="311" height="16">
+              <path d="M0 0H311V16H0V0Z" fill="url(#pattern0)"/>
+            </mask>
+            <g mask="url(#mask0_1552_2763)">
+              <path d="M0 0H311V16H0V0Z" fill="#9A4292"/>
+            </g>
+            <defs>
+              <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                <use xlink:href="#image0_1552_2763" transform="scale(0.00337 0.05556)"/>
+              </pattern>
+              <image id="image0_1552_2763" width="297" height="18" xlink:href="data:image/png;base64,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"/>
+            </defs>
+          </svg>
         </span>
       </h1>
       <div class="flex flex-wrap justify-center gap-2">
@@ -103,6 +114,18 @@
           placeholder="Pregúntame algo..."
           class="question-input w-full rounded-full border border-gray-200 shadow-xl outline-none bg-white"
         />
+         <!-- SELECTOR PERSONALIDAD -->
+        <select id="personality" class="personality-select absolute top-1.5 right-16 bg-purple-200">
+          <option class="flex gap-1 items-center" value="casual">
+            <span class="w-4 h-4 bg-green-600 block rounded-full">
+
+            </span>
+            Casual
+          </option>
+          <option value="tutor">Tutor</option>
+          <option value="profesional">Profesional</option>
+          <option value="tecnico">Técnico</option>
+        </select>
         <button
           id="sendBtn"
           onclick="sendMessage()"
@@ -120,33 +143,119 @@
   </div>
 
   <!-- MODAL INFO -->
-  <div id="infoModal" class="info-modal-overlay fixed inset-0 items-center justify-center z-50">
-    <div class="modal-info bg-white rounded-3xl p-8 flex flex-col gap-4 shadow-2xl">
-      <div class="flex justify-between items-center">
-        <h2 class="text-xl font-bold text-gray-800">🛠️ ¿Cómo funciona?</h2>
-        <button onclick="document.getElementById('infoModal').style.display='none'" class="text-gray-400 hover:text-gray-600 text-2xl font-bold bg-transparent border-none cursor-pointer">✕</button>
-      </div>
-      <p class="text-gray-600 text-sm leading-relaxed">
-        Este chatbot es una <strong>API intermediaria</strong> construida en Python que conecta al usuario con un modelo de IA.
-      </p>
-      <div class="bg-blue-50 rounded-2xl p-4 text-sm text-gray-700 leading-loose">
-        <p>👤 <strong>Usuario</strong> escribe una pregunta</p>
-        <p>⬇️</p>
-        <p>⚙️ <strong>FastAPI</strong> recibe y procesa</p>
-        <p>⬇️</p>
-        <p>🤖 <strong>Groq (LLaMA)</strong> genera la respuesta</p>
-        <p>⬇️</p>
-        <p>💬 Respuesta personalizada con tu nombre</p>
-      </div>
-      <div class="text-sm text-gray-600 flex flex-col gap-1">
-        <p>🐍 <strong>Backend:</strong> Python + FastAPI</p>
-        <p>🤖 <strong>IA:</strong> Groq — llama-3.3-70b-versatile</p>
-        <p>🎨 <strong>Frontend:</strong> HTML + Tailwind CSS</p>
-        <p>☁️ <strong>Deploy:</strong> Render (API) + Vercel (frontend)</p>
-        <p>👨‍💻 <strong>Autor:</strong> Sebastian Vasquez Echavarria</p>
-      </div>
+ <!-- MODAL INFO -->
+<div id="infoModal" class="info-modal-overlay fixed inset-0 items-center justify-center z-50">
+  <div class="modal-info bg-white rounded-3xl shadow-2xl" style="width:680px; max-height:85vh; overflow-y:auto; padding: 2rem;">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-gray-800">📄 Documentación del Proyecto</h2>
+      <button onclick="document.getElementById('infoModal').style.display='none'" class="text-gray-400 hover:text-gray-600 text-2xl font-bold bg-transparent border-none cursor-pointer">✕</button>
     </div>
+
+    <!-- 1. QUÉ ES -->
+    <section class="mb-6">
+      <h3 class="font-bold text-purple-700 text-base mb-2">🤖 ¿Qué es este proyecto?</h3>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        Es un <strong>chatbot con IA</strong> que funciona como intermediario entre el usuario y un modelo de lenguaje. 
+        El frontend (HTML + Tailwind) captura la pregunta del usuario y la envía a una API propia construida en Python. 
+        Esa API se comunica con <strong>Groq</strong> usando el modelo <strong>DeepSeek R1 (70B)</strong> para generar una respuesta inteligente y personalizada.
+      </p>
+    </section>
+
+    <!-- 2. ARQUITECTURA -->
+    <section class="mb-6">
+      <h3 class="font-bold text-purple-700 text-base mb-2">⚙️ ¿Cómo funciona?</h3>
+      <div class="bg-gray-50 rounded-2xl p-4 text-sm text-gray-700 leading-loose border border-gray-100">
+        <p>👤 <strong>Usuario</strong> escribe una pregunta en el frontend</p>
+        <p>⬇️</p>
+        <p>🌐 <strong>Vercel</strong> sirve el frontend (HTML + CSS + JS)</p>
+        <p>⬇️</p>
+        <p>📡 <strong>fetch()</strong> en JavaScript hace un POST a la API</p>
+        <p>⬇️</p>
+        <p>⚙️ <strong>FastAPI (Python)</strong> recibe la petición en el endpoint <code class="bg-purple-100 px-1 rounded">/ask</code></p>
+        <p>⬇️</p>
+        <p>🤖 <strong>Groq API</strong> procesa la pregunta con DeepSeek R1</p>
+        <p>⬇️</p>
+        <p>💬 La respuesta regresa al frontend y se escribe con efecto <strong>typewriter</strong></p>
+      </div>
+    </section>
+
+    <!-- 3. STACK -->
+    <section class="mb-6">
+      <h3 class="font-bold text-purple-700 text-base mb-2">🛠️ Stack tecnológico</h3>
+      <div class="grid grid-cols-2 gap-2 text-sm text-gray-600">
+        <div class="bg-gray-50 rounded-xl p-3 border border-gray-100">🐍 <strong>Backend:</strong> Python + FastAPI</div>
+        <div class="bg-gray-50 rounded-xl p-3 border border-gray-100">🎨 <strong>Frontend:</strong> HTML + Tailwind CSS</div>
+        <div class="bg-gray-50 rounded-xl p-3 border border-gray-100">🤖 <strong>IA:</strong> Groq — DeepSeek R1 70B</div>
+        <div class="bg-gray-50 rounded-xl p-3 border border-gray-100">💾 <strong>Historial:</strong> localStorage</div>
+        <div class="bg-gray-50 rounded-xl p-3 border border-gray-100">☁️ <strong>API Deploy:</strong> Render</div>
+        <div class="bg-gray-50 rounded-xl p-3 border border-gray-100">🚀 <strong>Frontend Deploy:</strong> Vercel</div>
+      </div>
+    </section>
+
+    <!-- 4. PASO A PASO -->
+    <section class="mb-6">
+      <h3 class="font-bold text-purple-700 text-base mb-2">📋 Proceso de desarrollo paso a paso</h3>
+      <ol class="text-sm text-gray-600 flex flex-col gap-3">
+        <li class="flex gap-3">
+          <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
+          <div><strong>Crear la estructura del proyecto</strong><br>
+          Se creó la carpeta <code class="bg-gray-100 px-1 rounded">api-python/</code> con subcarpeta <code class="bg-gray-100 px-1 rounded">app/</code> que contiene <code class="bg-gray-100 px-1 rounded">main.py</code>, <code class="bg-gray-100 px-1 rounded">schemas.py</code> y <code class="bg-gray-100 px-1 rounded">groq_service.py</code>.</div>
+        </li>
+        <li class="flex gap-3">
+          <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
+          <div><strong>Instalar dependencias</strong><br>
+          Se creó un entorno virtual y se instalaron: <code class="bg-gray-100 px-1 rounded">fastapi</code>, <code class="bg-gray-100 px-1 rounded">uvicorn</code>, <code class="bg-gray-100 px-1 rounded">groq</code>, <code class="bg-gray-100 px-1 rounded">python-dotenv</code>. Se generó el <code class="bg-gray-100 px-1 rounded">requirements.txt</code> con <code class="bg-gray-100 px-1 rounded">pip freeze</code>.</div>
+        </li>
+        <li class="flex gap-3">
+          <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
+          <div><strong>Construir la API en FastAPI</strong><br>
+          Se creó el endpoint <code class="bg-gray-100 px-1 rounded">POST /ask</code> que recibe <code class="bg-gray-100 px-1 rounded">name</code>, <code class="bg-gray-100 px-1 rounded">question</code> y <code class="bg-gray-100 px-1 rounded">personality</code>, y devuelve la respuesta del modelo.</div>
+        </li>
+        <li class="flex gap-3">
+          <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs font-bold">4</span>
+          <div><strong>Integrar Groq con system prompts</strong><br>
+          Se creó un diccionario de personalidades (<em>Casual, Tutor, Profesional, Técnico</em>) que cambia el <code class="bg-gray-100 px-1 rounded">system prompt</code> según la selección del usuario, controlando el comportamiento del modelo.</div>
+        </li>
+        <li class="flex gap-3">
+          <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs font-bold">5</span>
+          <div><strong>Construir el frontend</strong><br>
+          Se creó la interfaz con HTML + Tailwind CSS: modal de bienvenida, sidebar con historial, selector de personalidad, input de chat y efecto <em>typewriter</em> en las respuestas.</div>
+        </li>
+        <li class="flex gap-3">
+          <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs font-bold">6</span>
+          <div><strong>Historial con localStorage</strong><br>
+          Se implementó persistencia de conversaciones en el navegador usando <code class="bg-gray-100 px-1 rounded">localStorage</code>, permitiendo guardar, cargar y crear nuevos chats sin base de datos.</div>
+        </li>
+        <li class="flex gap-3">
+          <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs font-bold">7</span>
+          <div><strong>Variables de entorno</strong><br>
+          Se creó el archivo <code class="bg-gray-100 px-1 rounded">.env</code> con la variable <code class="bg-gray-100 px-1 rounded">GROQ_API_KEY</code> y se agregó al <code class="bg-gray-100 px-1 rounded">.gitignore</code> para no exponer la clave en GitHub.</div>
+        </li>
+        <li class="flex gap-3">
+          <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs font-bold">8</span>
+          <div><strong>Despliegue en Render (API)</strong><br>
+          Se conectó el repositorio de GitHub a Render. Se configuró el Start Command como <code class="bg-gray-100 px-1 rounded">uvicorn app.main:app --host 0.0.0.0 --port 10000</code> y se añadió la variable de entorno <code class="bg-gray-100 px-1 rounded">GROQ_API_KEY</code> desde el panel de Render.</div>
+        </li>
+        <li class="flex gap-3">
+          <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs font-bold">9</span>
+          <div><strong>Despliegue en Vercel (Frontend)</strong><br>
+          Se subieron los archivos del frontend a GitHub y se conectó el repositorio a Vercel. Se configuró el <code class="bg-gray-100 px-1 rounded">vercel.json</code> para servir los archivos estáticos correctamente.</div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- 5. AUTOR -->
+    <section class="bg-purple-50 rounded-2xl p-4 text-sm text-gray-600 border border-purple-100">
+      <p>👨‍💻 <strong>Autor:</strong> Sebastian Vasquez Echavarria</p>
+      <p>🔗 <strong>Portafolio:</strong> <a href="https://sebas-dev.vercel.app/" target="_blank" class="text-purple-600 hover:underline">sebas-dev.vercel.app</a></p>
+      <p>📁 <strong>GitHub:</strong> <a href="https://github.com/sebastianvasquezechavarria1234/python-api-render" target="_blank" class="text-purple-600 hover:underline">python-api-render</a></p>
+    </section>
+
   </div>
+</div>
+
 
   <script src="./script.js"></script>
 </body>
