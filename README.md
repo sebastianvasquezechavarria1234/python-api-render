@@ -1,3 +1,26 @@
+
+## 💻 Correr el proyecto en local
+
+**1. Clonar el repositorio**
+
+git clone https://github.com/sebastianvasquezechavarria1234/python-api-render.git
+cd api-python
+
+2. Crear y activar el entorno virtual
+python -m venv venv
+venv\Scripts\activate
+
+3. Instalar dependencias
+
+pip install -r requirements.txt
+4. Crear el archivo .env
+
+GROQ_API_KEY=tu_clave_aqui
+5. Correr la API
+
+uvicorn app.main:app --reload
+La API queda disponible en http://127.0.0.1:8000
+
 # Chat IA — Documentación
 
 ## ¿Qué es este proyecto?
