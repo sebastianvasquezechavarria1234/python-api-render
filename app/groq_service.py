@@ -35,7 +35,8 @@ personalidades = {
 
 def ask_groq(name: str, question: str, personality: str = "casual") -> str:
     response = client.chat.completions.create(
-        model="deepseek-r1-distill-llama-70b",
+        model="llama-3.3-70b-versatile",
+
         temperature=0.7,
         max_tokens=1024,
         messages=[
