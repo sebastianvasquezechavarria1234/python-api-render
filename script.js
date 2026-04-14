@@ -141,3 +141,4 @@ async function sendMessage() {
 }
 
 renderHistory();
+console.log("🚀 Chat IA cargado con éxito. Desarrollado por Sebastian Vasquez Echavarria.");
