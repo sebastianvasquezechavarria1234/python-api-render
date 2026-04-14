@@ -11,6 +11,9 @@ $("nameInput").addEventListener("keydown", e => e.key === "Enter" && startChat()
 $("questionInput").addEventListener("keydown", e => e.key === "Enter" && sendMessage());
 
 // Inicio de sesión
+/**
+ * Inicia la sesión del chat capturando el nombre del usuario.
+ */
 function startChat() {
   const name = $("nameInput").value.trim();
   if (!name) return alert("Escribe tu nombre");
