@@ -15,6 +15,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    return {"error": "Ocurrió un error inesperado en el servidor", "details": str(exc)}
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
