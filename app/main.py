@@ -23,4 +23,5 @@ def health():
 def ask(data: QuestionRequest):
     print(f"Pregunta recibida de {data.name}: {data.question}")
     answer = ask_groq(data.name, data.question)
+    print(f"Respuesta generada para {data.name}")
     return {"answer": answer}
