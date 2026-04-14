@@ -142,4 +142,10 @@ async function sendMessage() {
 }
 
 renderHistory();
+const savedName = localStorage.getItem("userName");
+if(savedName) {
+  userName = savedName;
+  $("activeName").textContent = savedName;
+  $("modal").style.display = "none";
+}
 console.log("🚀 Chat IA cargado con éxito. Desarrollado por Sebastian Vasquez Echavarria.");
