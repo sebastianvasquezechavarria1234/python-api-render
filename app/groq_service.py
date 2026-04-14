@@ -34,6 +34,10 @@ personalidades = {
 }
 
 def ask_groq(name: str, question: str, personality: str = "casual") -> str:
+    """
+    Solicita una respuesta a la API de Groq basada en el nombre del usuario, 
+    la pregunta y la personalidad seleccionada.
+    """
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
 
